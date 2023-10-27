@@ -2,4 +2,7 @@
 
 Documentando los servicios y arquitectura con los que cuenta mi homelab.
 
-![[Pasted image 20231026214426.png]]
+
+![](anexos/Pasted%20image%2020231026214426.png)
+
+
