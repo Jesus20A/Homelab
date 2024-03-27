@@ -1,1 +1,3 @@
 # Homelab
+
+![](img/homelab.png)
