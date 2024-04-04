@@ -1,0 +1,20 @@
+---
+
+- name: Installing Prometheus and Grafana
+  become: true
+  hosts: monitoring
+  gather_facts: true
+
+  roles:
+    - firewalld
+    - prometheus
+    - grafana
+
+- name: Installing Node Exporter
+  become: true
+  hosts: 24x7
+  gather_facts: true
+
+  roles:
+    - firewalld
+    - node-exporter
