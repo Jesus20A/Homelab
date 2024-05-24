@@ -1,0 +1,38 @@
+---
+# tasks file for nginx
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Check if package called nginx is installed
+  ansible.builtin.debug:
+    msg: "{{ ansible_facts.packages['nginx'] | length }} versions of nginx installed"
+  when: "'nginx' in ansible_facts.packages"
+
+- name: Install nginx on zypper
+  community.general.zypper:
+    name:
+      - nginx
+    update_cache: true
+    state: present
+  when:
+    - "not 'nginx' in ansible_facts.packages"
+    - ansible_pkg_mgr == 'zypper'
+
+- name: Install nginx on apt
+  ansible.builtin.apt:
+    name:
+      - nginx
+    update_cache: true
+    state: present
+  when:
+    - "not 'nginx' in ansible_facts.packages"
+    - ansible_pkg_mgr == 'apt'
+
+- name: Check if nginx is started
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: true
+

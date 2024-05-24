@@ -5,6 +5,7 @@ services            ansible_host=services-vm.homelab.local
 [debian]
 pi-hole             ansible_host=pi-hole.homelab.local
 nfs-vm              ansible_host=nfs-vm.homelab.local
+proxy               ansible_host=proxy.homelab.local
 
 [kubernetes]
 controlplane        ansible_host=controlplane.homelab.local

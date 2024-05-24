@@ -1,0 +1,9 @@
+---
+
+- name: Installing Prometheus and Grafana
+  become: true
+  hosts: 24x7
+  gather_facts: true
+
+  roles:
+    - nginx
