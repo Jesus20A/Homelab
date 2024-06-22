@@ -1,2 +1,6 @@
 ---
 # vars file for firewalld
+
+pkg_name : firewalld
+
+pkg_state : present

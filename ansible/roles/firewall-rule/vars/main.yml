@@ -1,0 +1,14 @@
+---
+# vars file for firewall-rule
+
+is_service:
+
+firewall_services:
+  - service:
+    state:
+    permanent:
+
+firewall_ports:
+  - port:
+    state:
+    permanent:

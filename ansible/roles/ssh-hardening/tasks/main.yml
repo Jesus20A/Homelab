@@ -1,0 +1,35 @@
+---
+# tasks file for ssh-hardening
+
+- name: Setting Port to 768
+  ansible.builtin.lineinfile:
+    path: "{{ file_path }}"
+    regexp: 'Port 22'
+    line: Port 768
+
+- name: Setting PermitRootLogin to no
+  ansible.builtin.lineinfile:
+    path: "{{ file_path }}"
+    regexp: '#?PermitRootLogin (prohibit-password|yes)'
+    line: PermitRootLogin no
+
+- name: Setting PasswordAuthentication to no
+  ansible.builtin.lineinfile:
+    path: "{{ file_path }}"
+    regexp: 'PasswordAuthentication yes'
+    line: PasswordAuthentication no
+
+- name: Getting system service facts
+  ansible.builtin.service_facts:
+
+- name: Restarting sshd services
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+  when: "'sshd.service' in ansible_facts.services"
+
+- name: Restarting ssh services
+  ansible.builtin.systemd:
+    name: ssh
+    state: restarted
+  when: "not 'sshd.service' in ansible_facts.services"

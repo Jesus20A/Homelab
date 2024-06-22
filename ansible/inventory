@@ -1,34 +1,25 @@
 [suse]
-monitoring          ansible_host=monitoring.homelab.local
-services            ansible_host=services-vm.homelab.local
+services            ansible_host=services.homelab.local
+nfs                 ansible_host=nfs.homelab.local
 
-[debian]
-pi-hole             ansible_host=pi-hole.homelab.local
-nfs-vm              ansible_host=nfs-vm.homelab.local
+
+[ubuntu]
+pihole              ansible_host=pihole-serv.homelab.local
 proxy               ansible_host=proxy.homelab.local
+guacamole           ansible_host=guacamole-serv.homelab.local
+jellyfin            ansible_host=jellyfin-serv.homelab.local
+nextcloud          ansible_host=nextcloud-serv.homelab.local
+vault               ansible_host=vault-serv.homelab.local
+minecraft           ansible_host=minecraft-serv.homelab.local
 
 [kubernetes]
 controlplane        ansible_host=controlplane.homelab.local
 node01              ansible_host=node01.homelab.local
 node02              ansible_host=node02.homelab.local
 
-[git-actions]
-git-runner          ansible_host=git-runner.homelab.local
-
-[ubuntu:children]
-kubernetes
-git-actions
-
-[rhel]
-rhel-serv1          ansible_host=rhel-serv1.homelab.local
-
-[24x7:children]
-suse
-debian
-
 [homelab:children]
 suse
-debian
 ubuntu
-rhel
+
+
 

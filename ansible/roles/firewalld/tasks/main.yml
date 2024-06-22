@@ -1,21 +1,40 @@
 ---
-- name: Gather the package facts
-  ansible.builtin.package_facts:
-    manager: auto
 
-- name: Check if package called firewalld is installed
-  ansible.builtin.debug:
-    msg: "{{ ansible_facts.packages['firewalld'] | length }} versions of firewalld installed"
-  when: "'firewalld' in ansible_facts.packages"
+- name: Dnf and Yum block
+  when:
+    - ansible_pkg_mgr == 'dnf'
+    - ansible_pkg_mgr == 'yum'
+  block:
+    - name: Installing using dnf or yum
+      ansible.builtin.dnf:
+        name: "{{ pkg_name }}"
+        update_cache: true
+        state: "{{ pkg_state }}"
 
-- name: Install firewalld
-  ansible.builtin.package:
-    name: firewalld
-    state: present
-  when: "not 'firewalld' in ansible_facts.packages"
+- name: Zypper block
+  when:
+    - ansible_pkg_mgr == 'zypper'
+  block:
+    - name: Installing using zypper
+      community.general.zypper:
+        name:
+          - "{{ pkg_name }}"
+        update_cache: true
+        state: "{{ pkg_state }}"
+
+- name: Install firewald on apt
+  when:
+    - ansible_pkg_mgr == 'apt'
+  block:
+    - name: Installing using apt
+      ansible.builtin.apt:
+        name:
+          - "{{ pkg_name }}"
+        update_cache: true
+        state: "{{ pkg_state }}"
 
 - name: Check if firewalld is started
   ansible.builtin.systemd:
-    name: firewalld
+    name: "{{ pkg_name }}"
     state: started
     enabled: true

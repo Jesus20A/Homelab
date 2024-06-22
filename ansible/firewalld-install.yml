@@ -1,0 +1,9 @@
+---
+
+- name: Installing firewalld
+  become: true
+  hosts: homelab
+  gather_facts: true
+
+  roles:
+    - firewalld

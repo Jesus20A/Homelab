@@ -1,0 +1,163 @@
+---
+- name: Adding rules to pihole host
+  become: true
+  hosts: homelab
+  gather_facts: true
+
+  tasks:
+    - name: Remove ssh default port
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: true
+        firewall_services:
+          - service: ssh
+            state: disabled
+            permanent: true
+    - name: Adding rules to pihole host
+      when:
+        - ansible_hostname == "pihole"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 80/tcp
+            state: enabled
+            permanent: true
+          - port: 53/tcp
+            state: enabled
+            permanent: true
+          - port: 53/udp
+            state: enabled
+            permanent: true
+    - name: Adding rules to nfs host
+      when:
+        - ansible_hostname == "nfs"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 2049/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to nextcloud host
+      when:
+        - ansible_hostname == "nextcloud"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 80/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to jellyfin host
+      when:
+        - ansible_hostname == "jellyfin"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 8096/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to services host
+      when:
+        - ansible_hostname == "services"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 5000/tcp
+            state: enabled
+            permanent: true
+          - port: 7575/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to proxy host
+      when:
+        - ansible_hostname == "proxy"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 80/tcp
+            state: enabled
+            permanent: true
+          - port: 443/tcp
+            state: enabled
+            permanent: true
+    - name: Adding rules to minecraft host
+      when:
+        - ansible_hostname == "minecraft-serv"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 8443/tcp
+            state: enabled
+            permanent: true
+          - port: 25565/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to vault host
+      when:
+        - ansible_hostname == "vault"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 8200/tcp
+            state: enabled
+            permanent: true
+
+    - name: Adding rules to guacamole host
+      when:
+        - ansible_hostname == "guacamole"
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
+            permanent: true
+          - port: 8080/tcp
+            state: enabled
+            permanent: true

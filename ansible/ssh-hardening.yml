@@ -1,0 +1,9 @@
+---
+
+- name: Basic ssh hardening on hosts
+  become: true
+  hosts: homelab
+  gather_facts: true
+
+  roles:
+    - ssh-hardening

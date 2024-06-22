@@ -1,0 +1,17 @@
+---
+- name: Adding rules to pihole host
+  become: true
+  hosts: homelab
+  gather_facts: true
+
+  tasks:
+    - name: Remove ssh default port
+      ansible.posix.firewalld:
+        zone: public
+        permanent: true
+        state: disabled
+        service: ssh
+    - name: Restart firewalld
+      ansible.builtin.systemd:
+       name: firewalld
+       state: restarted

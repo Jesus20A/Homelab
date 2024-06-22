@@ -1,0 +1,29 @@
+---
+# tasks file for firewall-rule
+
+- name: Permit traffic for ports
+  when:
+    - "{{ is_service | bool }} == false"
+  ansible.posix.firewalld:
+    zone: public
+    permanent: "{{ item.permanent }}"
+    state: "{{ item.state }}"
+    port: "{{ item.port }}"
+  with_items:
+    - "{{ firewall_ports }}"
+
+- name: Permit traffic for services
+  when:
+    - "{{ is_service | bool }} == true"
+  ansible.posix.firewalld:
+    zone: public
+    permanent: "{{ item.permanent }}"
+    state: "{{ item.state }}"
+    service: "{{ item.service }}"
+  with_items:
+    - "{{ firewall_services }}"
+
+- name: Restart firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: restarted

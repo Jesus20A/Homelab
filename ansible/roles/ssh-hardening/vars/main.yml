@@ -1,0 +1,4 @@
+---
+# vars file for ssh-hardening
+
+file_path: /etc/ssh/sshd_config

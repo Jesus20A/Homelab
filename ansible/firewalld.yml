@@ -1,9 +1,0 @@
----
-
-- name: Installing Prometheus and Grafana
-  become: true
-  hosts: proxy
-  gather_facts: true
-
-  roles:
-    - firewalld
