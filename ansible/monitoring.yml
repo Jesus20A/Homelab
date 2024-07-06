@@ -6,15 +6,43 @@
   gather_facts: true
 
   roles:
-    - firewalld
-    - prometheus
-    - grafana
+    - role: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 3000/tcp
+            state: enabled
+            permanent: true
+          - port: 9091/tcp
+            state: enabled
+            permanent: true
+    - role: prometheus
+      vars:
+        prometheus_url: https://github.com/prometheus/prometheus/releases/download/v2.53.0/prometheus-2.53.0.linux-amd64.tar.gz
+        prometheus_checksum: sha256:d9900a11e3c89261e6416e3c9989858bad7b206af8b6838dfe9a5392d8ddc60d
+        prometheus_tmp: /home/abdias/
+    - role: grafana
+      vars:
+        grafana_url: https://dl.grafana.com/enterprise/release/grafana-enterprise-11.1.0.linux-amd64.tar.gz
+        grafana_checksum: sha256:2e52d7e6c78473f85005ed157c456dc8edcf3f320188c45ec76ba9c1abe0986e
+        grafana_tmp: /home/abdias/
 
 - name: Installing Node Exporter
   become: true
-  hosts: 24x7
+  hosts: homelab
   gather_facts: true
 
   roles:
-    - firewalld
-    - node-exporter
+    - role: firewall-rule
+      vars:
+        is_service: false
+        firewall_ports:
+          - port: 9100/tcp
+            state: enabled
+            permanent: true
+    - role: node-exporter
+      vars:
+        node_exporter_url: https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
+        node_exporter_checksum: sha256:fbadb376afa7c883f87f70795700a8a200f7fd45412532cc1938a24d41078011
+        node_exporter_tmp: /home/abdias/
+        

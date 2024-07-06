@@ -2,7 +2,7 @@
 - name: Getting the node exporter tar
   ansible.builtin.get_url:
     url: "{{ node_exporter_url }}"
-    dest: "{{ tmp }}"
+    dest: "{{ node_exporter_tmp }}"
     checksum: "{{ node_exporter_checksum }}"
     mode: '0644'
 - name: Ensure group node_exporter exists
@@ -18,18 +18,18 @@
     create_home: false
 - name: Find file
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type f -name node_exporter*.tar.gz"
+    cmd: "find {{ node_exporter_tmp }} -type f -name node_exporter*.tar.gz"
   register: tar_file
 - name: Unarchive node exporter tar
   ansible.builtin.unarchive:
     remote_src: true
     src: "{{ tar_file.stdout }}"
-    dest: "{{ tmp }}"
+    dest: "{{ node_exporter_tmp }}"
     owner: node_exporter
     group: node_exporter
 - name: Find directory
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type d -name node_exporter*"
+    cmd: "find {{ node_exporter_tmp }} -type d -name node_exporter*"
   register: node_dir
 - name: Copy node exporter bin
   ansible.builtin.copy:
@@ -54,12 +54,6 @@
     name: node-exporter.service
     state: started
     enabled: true
-- name: Add port 9100 to firewalld
-  ansible.posix.firewalld:
-    port: 9100/tcp
-    state: enabled
-    permanent: true
-    immediate: true
 - name: Deleting downloaded files
   ansible.builtin.file:
     path: "{{ item }}"

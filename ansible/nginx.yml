@@ -2,7 +2,7 @@
 
 - name: Installing Prometheus and Grafana
   become: true
-  hosts: 24x7
+  hosts: 
   gather_facts: true
 
   roles:

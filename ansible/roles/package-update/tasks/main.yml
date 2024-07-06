@@ -1,0 +1,33 @@
+---
+# tasks file for pakage-update
+
+- name: Dnf and Yum block
+  when:
+    - ansible_pkg_mgr == 'dnf'
+    - ansible_pkg_mgr == 'yum'
+  block:
+    - name: Installing using dnf or yum
+      ansible.builtin.dnf:
+        update_only: true
+        state: latest
+        update_cache: true
+
+- name: Zypper block
+  when:
+    - ansible_pkg_mgr == 'zypper'
+  block:
+    - name: Installing using zypper
+      community.general.zypper:
+        name:
+          - "*"
+        update_cache: true
+        state: dist-upgrade
+
+- name: Install firewald on apt
+  when:
+    - ansible_pkg_mgr == 'apt'
+  block:
+    - name: Installing using apt
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true

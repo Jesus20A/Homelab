@@ -21,23 +21,23 @@
 - name: Getting the grafana tar
   ansible.builtin.get_url:
     url: "{{ grafana_url }}"
-    dest: "{{ tmp }}"
+    dest: "{{ grafana_tmp }}"
     checksum: "{{ grafana_checksum }}"
     mode: '0644'
 - name: Find file
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type f -name grafana*.tar.gz"
+    cmd: "find {{ grafana_tmp }} -type f -name grafana*.tar.gz"
   register: tar_file
 - name: Unarchive grafana tar
   ansible.builtin.unarchive:
     remote_src: true
     src: "{{ tar_file.stdout }}"
-    dest: "{{ tmp }}"
+    dest: "{{ grafana_tmp }}"
     owner: grafana
     group: grafana
 - name: Find directory
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type d -name grafana-v*"
+    cmd: "find {{ grafana_tmp }} -type d -name grafana-v*"
   register: grafana_dir
 - name: Copying files
   ansible.builtin.copy:
@@ -61,12 +61,6 @@
     name: grafana-server.service
     state: started
     enabled: true
-- name: Add port 3000 to firewalld
-  ansible.posix.firewalld:
-    port: 3000/tcp
-    state: enabled
-    permanent: true
-    immediate: true
 - name: Deleting downloaded files
   ansible.builtin.file:
     path: "{{ item }}"

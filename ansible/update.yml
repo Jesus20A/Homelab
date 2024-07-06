@@ -1,0 +1,8 @@
+---
+
+- name: Install available updates and upgrade existing packages
+  hosts: homelab
+  become: true
+  gather_facts: true
+  roles:
+    - package-update

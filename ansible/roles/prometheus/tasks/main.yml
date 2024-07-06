@@ -3,7 +3,7 @@
 - name: Getting the prometheus tar
   ansible.builtin.get_url:
     url: "{{ prometheus_url }}"
-    dest: "{{ tmp }}"
+    dest: "{{ prometheus_tmp }}"
     checksum: "{{ prometheus_checksum }}"
     mode: '0644'
 - name: Ensure group prometheus exists
@@ -26,18 +26,18 @@
     group: prometheus
 - name: Find file
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type f -name prometheus*.tar.gz"
+    cmd: "find {{ prometheus_tmp }} -type f -name prometheus*.tar.gz"
   register: tar_file
 - name: Unarchive prometheus tar
   ansible.builtin.unarchive:
     remote_src: true
     src: "{{ tar_file.stdout }}"
-    dest: "{{ tmp }}"
+    dest: "{{ prometheus_tmp }}"
     owner: prometheus
     group: prometheus
 - name: Find directory
   ansible.builtin.command:
-    cmd: "find {{ tmp }} -type d -name prometheus-*linux-amd64"
+    cmd: "find {{ prometheus_tmp }} -type d -name prometheus-*linux-amd64"
   register: prometheus_dir
 - name: Copying files
   ansible.builtin.copy:
@@ -89,12 +89,6 @@
     name: prometheus.service
     state: started
     enabled: true
-- name: Add port 9091 to firewalld
-  ansible.posix.firewalld:
-    port: 9091/tcp
-    state: enabled
-    permanent: true
-    immediate: true
 - name: Deleting downloaded files
   ansible.builtin.file:
     path: "{{ item }}"

@@ -1,25 +1,25 @@
 [suse]
-services            ansible_host=services.homelab.local
-nfs                 ansible_host=nfs.homelab.local
+services            ansible_host=192.168.1.143
+nfs                 ansible_host=192.168.1.250
+monitoring	    ansible_host=192.168.1.82 
 
-
-[ubuntu]
-pihole              ansible_host=pihole-serv.homelab.local
-proxy               ansible_host=proxy.homelab.local
-guacamole           ansible_host=guacamole-serv.homelab.local
-jellyfin            ansible_host=jellyfin-serv.homelab.local
-nextcloud          ansible_host=nextcloud-serv.homelab.local
-vault               ansible_host=vault-serv.homelab.local
-minecraft           ansible_host=minecraft-serv.homelab.local
+[ubuntu] 
+pihole              ansible_host=192.168.1.9    
+proxy               ansible_host=192.168.1.231  
+guacamole           ansible_host=192.168.1.235  
+jellyfin            ansible_host=192.168.1.167  
+nextcloud           ansible_host=192.168.1.139   
+vault               ansible_host=192.168.1.13
 
 [kubernetes]
-controlplane        ansible_host=controlplane.homelab.local
-node01              ansible_host=node01.homelab.local
-node02              ansible_host=node02.homelab.local
+controlplane        ansible_host=192.168.1.78	
+node01              ansible_host=192.168.1.79  
+node02             ansible_host=192.168.1.80    
 
 [homelab:children]
 suse
 ubuntu
+#kubernetes
 
 
 

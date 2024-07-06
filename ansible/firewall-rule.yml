@@ -5,14 +5,14 @@
   gather_facts: true
 
   tasks:
-    - name: Remove ssh default port
+    - name: Adding new ssh port
       ansible.builtin.include_role:
         name: firewall-rule
       vars:
-        is_service: true
-        firewall_services:
-          - service: ssh
-            state: disabled
+        is_service: false
+        firewall_ports:
+          - port: 768/tcp
+            state: enabled
             permanent: true
     - name: Adding rules to pihole host
       when:
@@ -22,9 +22,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 80/tcp
             state: enabled
             permanent: true
@@ -42,9 +39,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 2049/tcp
             state: enabled
             permanent: true
@@ -57,9 +51,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 80/tcp
             state: enabled
             permanent: true
@@ -72,9 +63,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 8096/tcp
             state: enabled
             permanent: true
@@ -87,9 +75,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 5000/tcp
             state: enabled
             permanent: true
@@ -105,9 +90,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 80/tcp
             state: enabled
             permanent: true
@@ -122,9 +104,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 8443/tcp
             state: enabled
             permanent: true
@@ -140,9 +119,6 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 8200/tcp
             state: enabled
             permanent: true
@@ -155,9 +131,15 @@
       vars:
         is_service: false
         firewall_ports:
-          - port: 768/tcp
-            state: enabled
-            permanent: true
           - port: 8080/tcp
             state: enabled
+            permanent: true
+    - name: Removing ssh default port
+      ansible.builtin.include_role:
+        name: firewall-rule
+      vars:
+        is_service: true
+        firewall_services:
+          - service: ssh
+            state: disabled
             permanent: true
